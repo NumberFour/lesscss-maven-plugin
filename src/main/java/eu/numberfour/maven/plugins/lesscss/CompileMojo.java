@@ -23,7 +23,7 @@ import org.codehaus.plexus.util.DirectoryScanner;
  * 
  * @author <a href="mailto:leonard.ehrenfried@web.de">Leonard Ehrenfried</a>
  * 
- * @goal list
+ * @goal compile
  * @requiresDependencyResolution compile
  * @description Creates a JSON-formatted list of files
  */
@@ -47,7 +47,7 @@ public class CompileMojo extends AbstractMojo {
     /**
      * Base directory of the file discovery process
      * 
-     * @parameter default-value="${basedir}/src/main/less"
+     * @parameter default-value="${basedir}/src/main/less/"
      */
     public String baseDir;
     /**
@@ -77,7 +77,8 @@ public class CompileMojo extends AbstractMojo {
         FileWriter fileWriter = null;
         try {
             
-            if(includes.length==0){
+            if(includes == null){
+                includes = new String[1];
                 includes[0]="**/*.less";
             }
             
@@ -87,7 +88,7 @@ public class CompileMojo extends AbstractMojo {
             log.info("Basedir:  " + baseDir);
             log.info("Output dir:   " + outputDir);
             log.info("Includes: " + Arrays.toString(includes));
-            log.info("Exludes:  " + Arrays.toString(excludes));
+            log.info("Excludes:  " + Arrays.toString(excludes));
 
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir(baseDir);
@@ -98,21 +99,25 @@ public class CompileMojo extends AbstractMojo {
 
             String[] includedFiles = scanner.getIncludedFiles();
             
+            log.info("Found " + includedFiles.length + " less files");
+            
             // Instantiates a new LessEngine
             LessEngine engine = new LessEngine();
             
             for (String i:includedFiles){
                 // Creates a new file containing the compiled content
-                File file = new File(i);
                 
-                engine.compile(file, new File(outputDir+"styles.css"));
+                File inputFile = new File(baseDir+i);
+                
+                File outputFile = new File(outputDir+i);
+                
+                log.info("Compiling "+inputFile.toString() +" to "+outputFile.toString());
+                
+                engine.compile(inputFile, outputFile);
                 
             }
             
             
-
-
-            log.info("File list contains " + includedFiles.length + " files");
 
 
         } catch (IOException ex) {
