@@ -96,7 +96,6 @@ public class CompileMojo extends AbstractMojo {
             
             log.info("Found " + includedFiles.length + " less files.");
             
-            // Instantiates a new LessEngine
             LessEngine engine = new LessEngine();
             
             for (String i:includedFiles){
