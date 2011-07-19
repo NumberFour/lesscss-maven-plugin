@@ -3,11 +3,8 @@ package eu.numberfour.maven.plugins.lesscss;
 import com.asual.lesscss.LessEngine;
 import com.asual.lesscss.LessException;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -17,15 +14,14 @@ import org.codehaus.plexus.util.DirectoryScanner;
 
 /**
  * <p>
- * Creates a JSON formatted list of files form a base directory, and optional 
- * includes and excludes.
+ * Compiles LessCSS files as part of the standard Maven build process.
  * </p>
  * 
  * @author <a href="mailto:leonard.ehrenfried@web.de">Leonard Ehrenfried</a>
  * 
  * @goal compile
  * @requiresDependencyResolution compile
- * @description Creates a JSON-formatted list of files
+ * @description Compiles LessCSS files
  */
 public class CompileMojo extends AbstractMojo {
 
@@ -74,7 +70,6 @@ public class CompileMojo extends AbstractMojo {
     public boolean caseSensitive;
 
     public void execute() throws MojoExecutionException, MojoFailureException {
-        FileWriter fileWriter = null;
         try {
             
             if(includes == null){
@@ -99,40 +94,24 @@ public class CompileMojo extends AbstractMojo {
 
             String[] includedFiles = scanner.getIncludedFiles();
             
-            log.info("Found " + includedFiles.length + " less files");
+            log.info("Found " + includedFiles.length + " less files.");
             
             // Instantiates a new LessEngine
             LessEngine engine = new LessEngine();
             
             for (String i:includedFiles){
-                // Creates a new file containing the compiled content
-                
                 File inputFile = new File(baseDir+i);
-                
                 File outputFile = new File(outputDir+i);
                 
                 log.info("Compiling "+inputFile.toString() +" to "+outputFile.toString());
                 
                 engine.compile(inputFile, outputFile);
-                
             }
-            
-            
-
 
         } catch (IOException ex) {
-            throw new MojoFailureException("Could not write output file.");
+            throw new MojoFailureException(ex, "IO Exception", "IO Exception while compiling less files.");
         } catch (LessException ex) {
-            throw new MojoFailureException("Could not write output file.");
-        } finally {
-            try {
-                if (fileWriter != null) {
-                    fileWriter.close();
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(CompileMojo.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            throw new MojoFailureException(ex, "Less Exception", "IO Exception while compiling less files.");
         }
-
     }
 }
