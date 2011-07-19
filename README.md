@@ -1,6 +1,6 @@
 #LessCSS Maven Plugin
 
-This plugin compiles Less to CSS at build time. By default it searches for Less files under ```/src/main/less```, but this is customizable. It is configured as follows:
+This plugin compiles [LessCSS](http://lesscss.org/) to CSS at build time. By default it searches for Less files under ```/src/main/less```, but this is customizable. It is configured as follows:
 
     <build>
     ...
