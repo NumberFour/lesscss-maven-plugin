@@ -11,6 +11,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
+import org.codehaus.plexus.util.FileUtils;
 
 /**
  * <p>
@@ -101,7 +102,12 @@ public class CompileMojo extends AbstractMojo {
             
             for (String i:includedFiles){
                 File inputFile = new File(baseDir+i);
-                File outputFile = new File(outputDir+i);
+                File outputFile = new File(outputDir+i.replaceAll(".less$", ".css"));
+                
+                File outputDir_ = new File(outputFile.getParent());
+                if(!outputDir_.exists()){
+                    outputDir_.mkdirs();
+                }
                 
                 log.info("Compiling "+inputFile.toString() +" to "+outputFile.toString());
                 
@@ -111,7 +117,7 @@ public class CompileMojo extends AbstractMojo {
         } catch (IOException ex) {
             throw new MojoFailureException(ex, "IO Exception", "IO Exception while compiling less files.");
         } catch (LessException ex) {
-            throw new MojoFailureException(ex, "Less Exception", "IO Exception while compiling less files.");
+            throw new MojoFailureException(ex, ex.getMessage(), ex.getMessage());
         }
     }
 }
