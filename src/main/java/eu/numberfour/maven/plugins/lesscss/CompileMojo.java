@@ -45,7 +45,7 @@ public class CompileMojo extends AbstractMojo {
      * 
      * @parameter default-value="${basedir}/src/main/less/"
      */
-    public String baseDir;
+    public String sourceDir;
     /**
      * Ant-style include pattern.
      * 
@@ -80,13 +80,13 @@ public class CompileMojo extends AbstractMojo {
             Log log = getLog();
             log.info("");
             log.info("Creating file list");
-            log.info("Basedir:      " + baseDir);
+            log.info("Source dir:   " + sourceDir);
             log.info("Output dir:   " + outputDir);
             log.info("Includes:     " + Arrays.toString(includes));
             log.info("Excludes:     " + Arrays.toString(excludes));
 
             DirectoryScanner scanner = new DirectoryScanner();
-            scanner.setBasedir(baseDir);
+            scanner.setBasedir(sourceDir);
             scanner.setIncludes(includes);
             scanner.setExcludes(excludes);
             scanner.setCaseSensitive(caseSensitive);
@@ -95,11 +95,12 @@ public class CompileMojo extends AbstractMojo {
             String[] includedFiles = scanner.getIncludedFiles();
             
             log.info("Found " + includedFiles.length + " less files.");
+            log.info("");
             
             LessEngine engine = new LessEngine();
             
             for (String i:includedFiles){
-                File inputFile = new File(baseDir+i);
+                File inputFile = new File(sourceDir+i);
                 File outputFile = new File(outputDir+'/'+i.replaceAll(".less$", ".css"));
                 
                 File outputDir_ = new File(outputFile.getParent());
