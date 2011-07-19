@@ -100,7 +100,7 @@ public class CompileMojo extends AbstractMojo {
             
             for (String i:includedFiles){
                 File inputFile = new File(baseDir+i);
-                File outputFile = new File(outputDir+i.replaceAll(".less$", ".css"));
+                File outputFile = new File(outputDir+'/'+i.replaceAll(".less$", ".css"));
                 
                 File outputDir_ = new File(outputFile.getParent());
                 if(!outputDir_.exists()){
