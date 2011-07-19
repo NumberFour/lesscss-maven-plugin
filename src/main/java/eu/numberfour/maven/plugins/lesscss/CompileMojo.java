@@ -11,7 +11,6 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugin.logging.Log;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.DirectoryScanner;
-import org.codehaus.plexus.util.FileUtils;
 
 /**
  * <p>
@@ -109,7 +108,12 @@ public class CompileMojo extends AbstractMojo {
                     outputDir_.mkdirs();
                 }
                 
-                log.info("Compiling "+inputFile.toString() +" to "+outputFile.toString());
+                if(log.isDebugEnabled()){
+                    log.debug("Compiling "+inputFile.toString() +" to "+outputFile.toString());
+                }
+                else{
+                    log.info("Compiling "+i);
+                }
                 
                 engine.compile(inputFile, outputFile);
             }
