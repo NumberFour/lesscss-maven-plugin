@@ -79,11 +79,11 @@ public class CompileMojo extends AbstractMojo {
             
             Log log = getLog();
             log.info("");
-            log.info("Creating file list ");
-            log.info("Basedir:  " + baseDir);
+            log.info("Creating file list");
+            log.info("Basedir:      " + baseDir);
             log.info("Output dir:   " + outputDir);
-            log.info("Includes: " + Arrays.toString(includes));
-            log.info("Excludes:  " + Arrays.toString(excludes));
+            log.info("Includes:     " + Arrays.toString(includes));
+            log.info("Excludes:     " + Arrays.toString(excludes));
 
             DirectoryScanner scanner = new DirectoryScanner();
             scanner.setBasedir(baseDir);
